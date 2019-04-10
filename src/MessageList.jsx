@@ -1,16 +1,20 @@
 import React from 'react';
+import Message from './Message.jsx';
 
+const MessageList = ({ messages, notification }) => {
+  console.log(messages)
 
-const MessageList = () => {
+  const messageList = messages.map(message => (
+    <Message key={message.id} name={message.name} content={message.content} />
+  ));
 
   return (
     <main className="messages">
-      <div className="message">
-        <span className="message-username">Anonymous1</span>
-        <span className="message-content">I won't be impressed with technology until I can download food.</span>
-      </div>
+        {messageList}
       <div className="message system">
-        Anonymous1 changed their name to nomnom.
+        <div className="notification">
+          <span className="notification-content">{notification}</span>
+        </div>
       </div>
     </main>
   )
@@ -18,3 +22,4 @@ const MessageList = () => {
 
 
 export default MessageList;
+
