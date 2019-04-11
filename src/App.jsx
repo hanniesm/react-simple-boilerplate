@@ -9,8 +9,9 @@ constructor(props) {
 
   this.state = {
     loading: true,
-    currentUser: {name: "Anonymous"},
+    currentUser: {name: "", color: ""},
     messages: [],
+    nbClients: 0,
   }
 }
   // Event handler triggered when the client connects to the server
@@ -26,8 +27,21 @@ constructor(props) {
   handleOnMessage = event => {
     // Parse the incoming message. data is acutally in evt.data
     const incomingMessage = JSON.parse(event.data);
-    console.log(incomingMessage);
+
     switch (incomingMessage.type) {
+      case 'nbClients':
+        this.setState({nbClients: incomingMessage.nbClients})
+      break;
+
+      case 'incomingClientInfo':
+        // getting username from the message object
+        const { id, name, color } = incomingMessage;
+        //updating the state with username
+        this.setState({
+          currentUser: { ...this.state.currentUser, id, name, color },
+        });
+      break;
+    
       case 'incomingNewMessage':
         const newMessage = {
           id: incomingMessage.id, type: "message", name: incomingMessage.name, content: incomingMessage.content
@@ -103,15 +117,6 @@ constructor(props) {
 
   componentDidMount() {
     console.log("componentDidMount <App />");
-    // setTimeout(() => {
-    //   console.log("Simulating incoming message");
-    //   // Add a new message to the list of messages in the data store
-    //   const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-    //   const messages = this.state.messages.concat(newMessage)
-    //   // Update the state of the app component.
-    //   // Calling setState will trigger a call to render() in App and all child components.
-    //   this.setState({messages: messages})
-    // }, 3000);
     const socketUrl = 'ws://localhost:3001';
 
     // Creating a new websocket
@@ -131,6 +136,7 @@ constructor(props) {
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <p className="nbClients">{this.state.nbClients} users online</p>
         </nav>
        <MessageList messages={this.state.messages}/>
        <ChatBar currentUser={this.state.currentUser} handleSubmit={this.handleSubmit}/>
