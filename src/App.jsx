@@ -27,7 +27,6 @@ constructor(props) {
   handleOnMessage = event => {
     // Parse the incoming message. data is acutally in evt.data
     const incomingMessage = JSON.parse(event.data);
-
     switch (incomingMessage.type) {
       case 'nbClients':
         this.setState({nbClients: incomingMessage.nbClients})
@@ -44,10 +43,15 @@ constructor(props) {
     
       case 'incomingNewMessage':
         const newMessage = {
-          id: incomingMessage.id, type: "message", name: incomingMessage.name, content: incomingMessage.content
+          id: incomingMessage.id, 
+          type: "message", 
+          name: incomingMessage.name, 
+          content: incomingMessage.content, 
+          color: incomingMessage.color
         }
 
         this.setState({ messages: [...this.state.messages, newMessage] })
+        
       break;
 
       case 'incomingNotification':
@@ -98,9 +102,8 @@ constructor(props) {
     }
     
     const newMessage = {
-      type: "postMessage", name: messageName, content: content
+      type: "postMessage", name: messageName, content: content, color: this.state.currentUser.color
     }
-
     // this.setState({ messages: [...this.state.messages, newMessage] })
     // send is a built-in method on the socket to send the message to the server
     this.socket.send(JSON.stringify(newMessage));
@@ -138,7 +141,7 @@ constructor(props) {
           <a href="/" className="navbar-brand">Chatty</a>
           <p className="nbClients">{this.state.nbClients} users online</p>
         </nav>
-       <MessageList messages={this.state.messages}/>
+       <MessageList messages={this.state.messages} />
        <ChatBar currentUser={this.state.currentUser} handleSubmit={this.handleSubmit}/>
      </div>
     );
