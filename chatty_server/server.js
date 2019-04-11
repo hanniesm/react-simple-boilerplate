@@ -43,6 +43,7 @@ wss.on('connection', (ws) => {
           break;
         case 'postNotification':
           clientMsg.type = 'incomingNotification';
+          clientMsg.id = uuidv4();
           wss.broadcast(JSON.stringify(clientMsg));
 
           break;

@@ -11,7 +11,6 @@ constructor(props) {
     loading: true,
     currentUser: {name: "Anonymous"},
     messages: [],
-    notification: "",
   }
 }
   // Event handler triggered when the client connects to the server
@@ -27,19 +26,22 @@ constructor(props) {
   handleOnMessage = event => {
     // Parse the incoming message. data is acutally in evt.data
     const incomingMessage = JSON.parse(event.data);
-    console.log(incomingMessage)
+    console.log(incomingMessage);
     switch (incomingMessage.type) {
       case 'incomingNewMessage':
         const newMessage = {
-          id: incomingMessage.id, name: incomingMessage.name, content: incomingMessage.content
+          id: incomingMessage.id, type: "message", name: incomingMessage.name, content: incomingMessage.content
         }
-        console.log(newMessage)
 
         this.setState({ messages: [...this.state.messages, newMessage] })
       break;
 
       case 'incomingNotification':
-        this.setState({ notification: incomingMessage.message })
+        const newNotification = {
+          id: incomingMessage.id, type: "notification", name: incomingMessage.name, content: incomingMessage.message
+        }
+
+        this.setState({ messages: [...this.state.messages, newNotification] })
       break;
 
       default: 
@@ -73,16 +75,21 @@ constructor(props) {
     });
   }
 
-  addNewMessage =  content => {
-    const newMessage = {
-      type: "postMessage", name: this.state.currentUser.name, content: content
+  addNewMessage =  (name, content) => {
+    let messageName = '';
+    if (name === '') {
+      messageName = this.state.currentUser.name;
+    } else {
+      messageName = name;
     }
-    console.log(newMessage)
+    
+    const newMessage = {
+      type: "postMessage", name: messageName, content: content
+    }
 
     // this.setState({ messages: [...this.state.messages, newMessage] })
     // send is a built-in method on the socket to send the message to the server
     this.socket.send(JSON.stringify(newMessage));
-
   }
 // Like to change this so that if change username it shows the first time they post a message. 
   handleSubmit = ({name, content}) => {
@@ -90,7 +97,7 @@ constructor(props) {
       this.updateUsername(name)
     }
     if (content != '') {
-      this.addNewMessage(content)
+      this.addNewMessage(name, content)
     }
   }
 
@@ -125,7 +132,7 @@ constructor(props) {
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
-       <MessageList messages={this.state.messages} notification={this.state.notification}/>
+       <MessageList messages={this.state.messages}/>
        <ChatBar currentUser={this.state.currentUser} handleSubmit={this.handleSubmit}/>
      </div>
     );
