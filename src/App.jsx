@@ -9,7 +9,7 @@ constructor(props) {
 
   this.state = {
     loading: true,
-    currentUser: {name: "", color: ""},
+    currentUser: {name: '', color: ''},
     messages: [],
     nbClients: 0,
   }
@@ -44,7 +44,7 @@ constructor(props) {
       case 'incomingNewMessage':
         const newMessage = {
           id: incomingMessage.id, 
-          type: "message", 
+          type: 'message', 
           name: incomingMessage.name, 
           content: incomingMessage.content, 
           color: incomingMessage.color
@@ -56,7 +56,10 @@ constructor(props) {
 
       case 'incomingNotification':
         const newNotification = {
-          id: incomingMessage.id, type: "notification", name: incomingMessage.name, content: incomingMessage.message
+          id: incomingMessage.id, 
+          type: 'notification', 
+          name: incomingMessage.name, 
+          content: incomingMessage.message
         }
 
         this.setState({ messages: [...this.state.messages, newNotification] })
@@ -102,7 +105,10 @@ constructor(props) {
     }
     
     const newMessage = {
-      type: "postMessage", name: messageName, content: content, color: this.state.currentUser.color
+      type: 'postMessage', 
+      name: messageName, 
+      content: content, 
+      color: this.state.currentUser.color
     }
     // this.setState({ messages: [...this.state.messages, newMessage] })
     // send is a built-in method on the socket to send the message to the server
@@ -119,7 +125,7 @@ constructor(props) {
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
+    console.log('componentDidMount <App />');
     const socketUrl = 'ws://localhost:3001';
 
     // Creating a new websocket
@@ -137,9 +143,9 @@ constructor(props) {
   render() {
     return (
       <div>
-        <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
-          <p className="nbClients">{this.state.nbClients} users online</p>
+        <nav className='navbar'>
+          <a href='/' className='navbar-brand'>Chatty</a>
+          <p className='nbClients'>{this.state.nbClients} users online</p>
         </nav>
        <MessageList messages={this.state.messages} />
        <ChatBar currentUser={this.state.currentUser} handleSubmit={this.handleSubmit}/>

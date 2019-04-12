@@ -5,8 +5,8 @@ class ChatBar extends Component {
     super(props)
   
     this.state = {
-      name: "",
-      content: "",
+      name: '',
+      content: '',
     }
 }
 
@@ -28,18 +28,18 @@ onEnter = (event) => {
 
   render() {
     return (
-      <footer className="chatbar">
+      <footer className='chatbar'>
         <input 
-          className="chatbar-username" 
-          type="text" 
-          placeholder="Your Name (Optional)" 
-          name="username" 
+          className='chatbar-username' 
+          type='text' 
+          placeholder='Your Name (Optional)' 
+          name='username' 
           onChange={this.setUserName} 
           onKeyPress={this.onEnter} />
         <input 
-          className="chatbar-message" 
-          placeholder="Type a message and hit ENTER" 
-          name="content" 
+          className='chatbar-message' 
+          placeholder='Type a message and hit ENTER' 
+          name='content' 
           onChange={this.setContent} 
           onKeyPress={this.onEnter} />
       </footer>
