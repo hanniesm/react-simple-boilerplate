@@ -110,7 +110,7 @@ constructor(props) {
       content: content, 
       color: this.state.currentUser.color
     }
-    // this.setState({ messages: [...this.state.messages, newMessage] })
+    
     // send is a built-in method on the socket to send the message to the server
     this.socket.send(JSON.stringify(newMessage));
   }
